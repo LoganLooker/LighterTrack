@@ -79,11 +79,11 @@
 			<ul id="navigation">
 				<li class="active">Home</li>
 				<li> <a href="shop.html">Shop</a></li>
-				<li> <a href="index.html">My Lighters</a></li>
-				<li> <a href="index.html">Groups</a></li>
-				<li> <a href="index.html">Top 50</a></li>
-				<li> <a href="index.html">T.O.S</a></li>
-				<li> <a href="index.html">Login</a></li>
+				<li> <a href="index.php">My Lighters</a></li>
+				<li> <a href="index.php">Groups</a></li>
+				<li> <a href="index.php">Top 50</a></li>
+				<li> <a href="index.php">T.O.S</a></li>
+				<li> <a href="index.php">Login</a></li>
 			</ul>
 
 		<div id="tracking-stats">
