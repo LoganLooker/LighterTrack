@@ -147,8 +147,8 @@ $ids = $b->get_all_lighter_ids();
     echo $id;
 }*/
 $result = $b->get_all_locations();
-foreach($result as $doc){
+/*foreach($result as $doc){
     var_dump($doc);
-}
-echo 'it works';
+}*/
+//echo 'it works';
 ?>
