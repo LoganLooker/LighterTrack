@@ -13,7 +13,6 @@ class lighter{
     public function __construct($addy, $pt, $id){
         $this->address = $addy;
         $this->port = $pt;
-        # $client = new MongoClient('mongodb://192.168.1.120:27017');
         $client = new MongoClient();
         $this->c = $client->LighterTracker->lighters;
         $this->id = $id;
@@ -40,26 +39,22 @@ class lighter{
     }
 
     private function update(){
-        //pass
         $this->c->modify(array('id' => $this->doc['id']), $this->doc);
     }
     public function update_location($location){
         // append a new lat/long into lighter
-        // to do 
         array_push($this->doc['locations'], $this->validate_location($location));
         $this->update();
     }
 
     public function update_user(){
         // append a new user id into lighter
-        // to do
         array_push($this->doc['users'], user);
         $this->update();
     }
 
     public function get_past_locs(){
         // return array of past locations
-        // to do
         return $this->doc['locations'];
     }
 
@@ -108,20 +103,22 @@ class Db_relate{
     public function __construct($addy, $port){
         $this->port = $port;
         $this->address = $addy;
-        # $mc= new MongoClient('mongodb://192.168.1.120:27017');
         $mc= new MongoClient();
         $this->db = $mc->LighterTracker;
     }
 
-    public function get_all_lighters($registered = True){
-        $c = $this->db->lighers;
+    public function get_all_lighter_ids($registered = True){
+        $c = $this->db->lighters;
+        $return = array();
         if($registered){
-            $pipe = null;
+            $result = $c->find(array("locations" => array('$exists' => 'true')));
         }else{
-            $pipe = null;
+            $result = $c->find();
         }
-        $result = $c->aggregate($pipe); 
-        return $result;
+        foreach($result as $doc){
+            array_push($return, $doc['id']);
+        }
+        return $return;
     }
 
     public function get_all_users(){
@@ -131,10 +128,13 @@ class Db_relate{
     public function get_all_locations(){
         $c = $this->db->lighters;
         $pipe = array(
-            '$match' => array(
+            array('$match' => array(
                 'locations' => 
-                    array('$exists' => 'true')
-                )
+                    array('$exists' => 'true'))),
+            array('$unwind' => '$locations'),
+            array('$group' => array(
+                    '_id' => '$id',
+                    'locations' => array('$push' => '$locations')))
         );
         $result = $c->aggregate($pipe);
         return $result;
@@ -142,6 +142,10 @@ class Db_relate{
 }
 
 $b = new Db_relate('localhost', 27017);
+$ids = $b->get_all_lighter_ids();
+/*foreach($ids as $id){
+    echo $id;
+}*/
 $result = $b->get_all_locations();
 foreach($result as $doc){
     var_dump($doc);
