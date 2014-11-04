@@ -1,5 +1,5 @@
 <?php
-    include_once('includes/mongo_utils.php');
+    include_once('includes/page_utils.php');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -14,13 +14,17 @@
     <script src="https://maps.googleapis.com/maps/api/js"></script>
 	<script>
 
-		var locations = [
+		/*var locations = [
 			['<div id="infowindow-div"><b>Location:</b> Bradford, OH</div>', 40.1153010,-84.4592700, 1],
 			['<div id="infowindow-div"><b>Location:</b> Los Angeles, CA</div>', 34.060339,-118.240356, 2],
 			['<div id="infowindow-div"><b>Location:</b> York, PA</div>', 39.961777,-76.728172, 3],
 			['<div id="infowindow-div"><b>Location:</b> Columbus, OH</div>', 39.958965,-82.996216, 4],
 			['<div id="infowindow-div"><b>Location:</b> Muncie, IN</div>', 40.190857,-85.385399, 5]
-		];
+        ];*/
+        <?php
+        $a = new Map();
+        $a->put_pointers();
+        ?>
 
 		function initialize() {
 

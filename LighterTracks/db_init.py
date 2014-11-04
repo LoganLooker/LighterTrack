@@ -14,8 +14,8 @@ locations = []
 with open('cities.csv', 'r') as file:
     reader = csv.DictReader(file)
     for row in reader:
-        tmp = {'id' : row['zip'],
-               'latlong' : [row['lat'], row['long']],
+        tmp = {'zip' : int(row['zip']),
+               'latlong' : [float(row['lat']), float(row['long'])],
                'name' : row['city'],
                'state': row['state']
                }
@@ -35,7 +35,7 @@ for x in range(1, 20):
             tmpLighter['history'].append({'user_id': user, 'locations': []})
         for j in range(len(tmpLighter['history'])):
             if tmpLighter['history'][j]['user_id'] == user:
-                z = locations[random.randint(0, len(locations))]['id']
+                z = locations[random.randint(0, len(locations))]['zip']
                 tmpLighter['history'][j]['locations'].append(z)
     lighters.append(tmpLighter)
     pprint.pprint(tmpLighter)

@@ -91,7 +91,7 @@ class lighter{
 
 }
 
-$a = new lighter('localhost', 27017, 1);
+//$a = new lighter('localhost', 27017, 1);
 
 
 class Db_relate{
@@ -111,7 +111,8 @@ class Db_relate{
         $c = $this->db->lighters;
         $return = array();
         if($registered){
-            $result = $c->find(array("locations" => array('$exists' => 'true')));
+            # $result = $c->find(array("locations" => array('$exists' => 'true')));
+            $result = $c->find(array("history" => array('$exists' => 'true')));
         }else{
             $result = $c->find();
         }
@@ -129,25 +130,36 @@ class Db_relate{
         $c = $this->db->lighters;
         $pipe = array(
             array('$match' => array(
-                'locations' => 
+                'history' => 
                     array('$exists' => 'true'))),
-            array('$unwind' => '$locations'),
+            array('$unwind' => '$history'),
+            array('$unwind' => '$history.locations'),
             array('$group' => array(
                     '_id' => '$id',
-                    'locations' => array('$push' => '$locations')))
+                    'locations' => array('$push' => '$history.locations')))
         );
         $result = $c->aggregate($pipe);
+        return $result['result'];
+    }
+
+    public function get_city_data($zip_array){
+        $c = $this->db->locations;
+        $result = $c->find(array('zip' => array('$in' => $zip_array)));
         return $result;
     }
 }
 
-$b = new Db_relate('localhost', 27017);
+/*$b = new Db_relate('localhost', 27017);
 $ids = $b->get_all_lighter_ids();
-/*foreach($ids as $id){
-    echo $id;
-}*/
+foreach($ids as $id){
+    echo '<br />' . $id . '*';
+}
 $result = $b->get_all_locations();
-/*foreach($result as $doc){
+foreach($result as $doc){
+    echo '<br />' . var_dump($doc);
+}
+$result = $b->get_city_data(array(12345));
+foreach($result as $doc){
     var_dump($doc);
 }*/
 //echo 'it works';
