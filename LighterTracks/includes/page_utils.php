@@ -6,9 +6,15 @@ include_once('mongo_utils.php');
 
 class Map{
 
-    public function put_pointers(){
+    public function put_pointers($uid=Null){
         $b = new Db_relate('localhost', 27017);
-        $locations = $b->get_all_locations();
+        if(is_null($uid)){
+            //echo 'True';
+            $locations = $b->get_all_locations();
+        }else{
+            //echo 'False';
+            $locations = $b->get_locations_by_user($uid);
+        }
         $zips = array();
         foreach($locations as $lighter){
             foreach($lighter['locations'] as $zip){

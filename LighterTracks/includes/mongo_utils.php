@@ -147,20 +147,44 @@ class Db_relate{
         $result = $c->find(array('zip' => array('$in' => $zip_array)));
         return $result;
     }
+
+    public function get_locations_by_user($uid){
+        $c = $this->db->lighters;
+        $pipe = array(
+            array('$match' => array(
+                'history' => 
+                    array('$exists' => 'true'))),
+            array('$unwind' => '$history'),
+            array('$match' => array(
+                'history.user_id' => 
+                    array('$eq' => $uid))),
+            array('$unwind' => '$history.locations'),
+            array('$group' => array(
+                    '_id' => '$id',
+                    'locations' => array('$push' => '$history.locations')))
+        );
+        $result = $c->aggregate($pipe);
+        return $result['result'];
+    }
 }
 
-/*$b = new Db_relate('localhost', 27017);
-$ids = $b->get_all_lighter_ids();
+//$b = new Db_relate('localhost', 27017);
+/*$ids = $b->get_all_lighter_ids();
 foreach($ids as $id){
     echo '<br />' . $id . '*';
-}
-$result = $b->get_all_locations();
+}*/
+/*$result = $b->get_all_locations();
 foreach($result as $doc){
     echo '<br />' . var_dump($doc);
-}
-$result = $b->get_city_data(array(12345));
+}*/
+/*$result = $b->get_city_data(array(12345));
 foreach($result as $doc){
     var_dump($doc);
+}*/
+//echo '<br />';
+/*$result = $b->get_locations_by_user(4);
+foreach($result as $doc){
+    echo '<br />' . var_dump($doc);
 }*/
 //echo 'it works';
 ?>

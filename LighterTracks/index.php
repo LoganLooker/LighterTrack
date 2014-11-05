@@ -23,7 +23,11 @@
         ];*/
         <?php
         $a = new Map();
-        $a->put_pointers();
+        if(isset($_SESSION['uid'])){
+            $a->put_pointers($_SESSION['uid']);
+        }else{
+            $a->put_pointers();
+        }
         ?>
 
 		function initialize() {
